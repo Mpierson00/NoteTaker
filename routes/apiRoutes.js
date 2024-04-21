@@ -1,6 +1,9 @@
 const fs = require('fs');
 const path = require('path');
-const notes = require('../db/db.json');
+
+function getNotes() {
+    return JSON.parse(fs.readFileSync(path.join(__dirname, '../db/db.json'), 'utf8'));
+}
 
 module.exports = (app) => {
     // GET route to get the notes
@@ -10,7 +13,11 @@ module.exports = (app) => {
 
     //POST route to create a new note
     app.post('/api/notes', (req, res) => {
-        const newNote = { ...req.body, id: Math.random(36).toString(2, 9) };
+        const notes = getNotes();
+        const newNote = { 
+            ...req.body, 
+            id: Math.random().toString(36).substr(2, 9)
+         };
         notes.push(newNote);
         fs.writeFileSync(path.join(__dirname, '../db/db.json'), JSON.stringify(notes));
         res.json(newNote);
