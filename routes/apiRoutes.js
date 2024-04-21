@@ -8,6 +8,7 @@ function getNotes() {
 module.exports = (app) => {
     // GET route to get the notes
     app.get('/api/notes', (req, res) => {
+        let notes = getNotes();
         res.json(notes);
     });
 
@@ -26,7 +27,9 @@ module.exports = (app) => {
     // Delete route for deleteing a note by ID
     app.delete('/api/notes/:id', (req, res) => {
         const id = req.params.id;
+        console.log("Reading notes from file.");
         let notes = getNotes();
+        console.log("notes read successfully:", notes);
         const filteredNotes = notes.filter(note => note.id !== id);
         fs.writeFileSync(path.join(__dirname, '../db/db.json'), JSON.stringify(filteredNotes));
         res.json({ success: true, msg: 'Note deleted' });
