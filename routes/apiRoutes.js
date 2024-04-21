@@ -25,6 +25,7 @@ module.exports = (app) => {
 
     // Delete route for deleteing a note by ID
     app.delete('/api/notes/:id', (req, res) => {
+        let notes = getNotes();
         const updatedNotes = notes.filter(note => note.id !== req.params.id);
         fs.writeFileSync(path.join(__dirname, '../db/db.json'), JSON.stringify(updatedNotes));
         res.json({ ok: true });
